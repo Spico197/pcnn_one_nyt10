@@ -12,6 +12,12 @@ from tqdm import tqdm
 def time_now():
     return datetime.now().strftime(r'%Y-%m-%d %H:%M:%S')
 
+def tqdm_enumerate(iter, ncols=75):
+    i = 0
+    for y in tqdm(iter, ncols=ncols):
+        yield i, y
+        i += 1
+
 
 class DataHelper(object):
     # MODE_INSTANCE = 0       # normal multi-label classification
@@ -71,7 +77,7 @@ class DataHelper(object):
                 self.word_vec_dim = len(self.word_vec_raw[0]['vec'])
                 
                 self.word_vec = np.zeros((self.vocab_size, self.word_vec_dim), dtype=np.float32)
-                for ind, word in tqdm(enumerate(self.vocab), ncols=75):
+                for ind, word in tqdm_enumerate((self.vocab), ncols=75):
                     self.word2id[word] = ind
                     self.word_vec[ind, :] = self.word_vec_raw[ind]['vec']
                 self.word2id['UNK'] = self.vocab_size
@@ -88,9 +94,12 @@ class DataHelper(object):
                 self.sentence_label = np.zeros((self.number_of_instances), dtype=np.int64)
                 self.sentence_length = np.zeros((self.number_of_instances), dtype=np.int64)
 
-                for ind, data in tqdm(enumerate(self._data_raw), ncols=75):
+                for ind, data in tqdm_enumerate((self._data_raw), ncols=75):
                     self.sentence_word[ind, :] = self._get_sentence_sequence(data['sentence'])
-                    self.sentence_label[ind] = self.rel2id[data['relation']]
+                    if data['relation'] in self.rel2id:
+                        self.sentence_label[ind] = self.rel2id[data['relation']]
+                    else:
+                        self.sentence_label[ind] = self.rel2id['NA']
                     self.sentence_length[ind] = len(data['sentence'].split())
                     self.sentence_pos1[ind, :], self.sentence_pos2[ind, :] = \
                         self._get_sentence_position_embedding(data['sentence'], 
@@ -116,7 +125,6 @@ class DataHelper(object):
 
                 del self._data_raw
                 del self.word_vec_raw
-                del self.rel2id
                 del self.vocab
                 del self.word2id
 
