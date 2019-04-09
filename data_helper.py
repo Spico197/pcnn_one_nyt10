@@ -238,16 +238,16 @@ class DataHelper(object):
             _ins_rel.append(self.sentence_label[self.bag_scope[self.indices[ind]][0]:self.bag_scope[self.indices[ind]][1]])
             _length.append(self.sentence_length[self.bag_scope[self.indices[ind]][0]:self.bag_scope[self.indices[ind]][1]])
             bag_size = self.bag_scope[self.indices[ind]][1] - self.bag_scope[self.indices[ind]][0]
-            _scope.append([cur_pos, cur_pos + bag_size])
+            _bag_scope.append([cur_pos, cur_pos + bag_size])
             cur_pos = cur_pos + bag_size
-        for ind in range(batch_size - (self.new_idx - self.idx)):   # padding
+        for ind in range(self.batch_size - (self.new_idx - self.idx)):   # padding
             _word.append(np.zeros((1, self.sentence_word.shape[-1]), dtype=np.int32))
             _pos1.append(np.zeros((1, self.sentence_pos1.shape[-1]), dtype=np.int32))
             _pos2.append(np.zeros((1, self.sentence_pos2.shape[-1]), dtype=np.int32))
             _bag_rel.append(0)
             _ins_rel.append(np.zeros((1), dtype=np.int32))
             _length.append(np.zeros((1), dtype=np.int32))
-            _scope.append([cur_pos, cur_pos + 1])
+            _bag_scope.append([cur_pos, cur_pos + 1])
             cur_pos += 1
 
         batch_data = {}
@@ -257,7 +257,7 @@ class DataHelper(object):
         batch_data['bag_rel'] = np.stack(_bag_rel)
         batch_data['ins_rel'] = np.concatenate(_ins_rel)
         batch_data['length'] = np.concatenate(_length)
-        batch_data['scope'] = np.stack(_scope)
+        batch_data['scope'] = np.stack(_bag_scope)
 
         self.idx = self.new_idx
 

@@ -1,4 +1,5 @@
 import os
+import numpy as np
 
 from keras.layers import Input
 from keras.models import Model
@@ -50,14 +51,17 @@ class CNN_ONE(object):
     def train(self, epochs=1):
         for iter_step in range(epochs):
             batch_data = self.train_data_helper.next_batch()
-            model.fit([batch_data['bag_rel'], 
-                       batch_data['bag_rel'],  
-                       batch_data['bag_rel'], 
-                       batch_data['bag_rel'], 
-                       batch_data['bag_rel']], batch_data['bag_rel'],
+            self.model.fit([batch_data['bag_rel'], 
+                            batch_data['bag_rel'],  
+                            batch_data['bag_rel'], 
+                            batch_data['bag_rel'], 
+                            batch_data['bag_rel']], batch_data['bag_rel'],
                       epochs=1)
         print('model storing')
         if not os.path.exists(self.result_path):
             os.mkdir(self.result_path)
-        model.save(os.path.join(self.result_path, 'keras_cnn_one.model'))
+        self.model.save(os.path.join(self.result_path, 'keras_cnn_one.model'))
         print('storing finished')
+
+    def summary(self):
+        return self.model.summary()

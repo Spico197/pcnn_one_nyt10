@@ -14,11 +14,12 @@ def __logit__(x, rel_tot, var_scope=None):
 
 def bag_one(x, scope, bag_label, rel_tot, name=None, keep_prob=1.0):
     bag_repre = []
-    scope = K.eval(scope)
-    for i in range(scope.shape[0]):
+    for i in range(scope.shape[1]):
+        # bag_hidden_mat = x[scope[i][0]:scope[i][1]]
+        # TODO: x indices should be a int, but I have tried K.cast and still not solve the problem
         bag_hidden_mat = x[scope[i][0]:scope[i][1]]
         instance_logit = Softmax(axis=-1)(__logit__(bag_hidden_mat, rel_tot)) # (n', hidden_size) -> (n', rel_tot)
-        j = K.argmax(instance_logit[:, bag_label[i]], output_type=tf.int32)
+        j = K.argmax(instance_logit[:, bag_label[i]], output_type=np.int32)
         bag_repre.append(bag_hidden_mat[j])
     bag_repre = K.stack(bag_repre)
     bag_repre = Dropout(1 - keep_prob)(bag_repre)
