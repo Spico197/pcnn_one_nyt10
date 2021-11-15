@@ -1,10 +1,12 @@
-# PCNN+ONE based Relation Extraction via Tensorflow Framework
+# ~~PCNN+ONE based Relation Extraction via Tensorflow Framework~~
 
-This is a tf1.1.3 based repo which use PCNN+ONE to solve Relation Extraction problems. Most of the ideas borrow from [OpenNRE](https://github.com/thunlp/OpenNRE).
+This is a tf1.1.3 based repo which use ~~PCNN+ONE~~ to solve Relation Extraction problems. Most of the ideas borrow from [OpenNRE](https://github.com/thunlp/OpenNRE).
+
+**NOTICE:** This is actually PCNN+MAX instead of ONE, and this repo is archived and will not be updated.
 
 Well, I have to say, Keras is a great framework and easy to use in model stacking. But, it is not enough flexible to some self-design and research project. Maybe it is because I have not got the spirit of Keras... So I decide to use tensorflow instead of keras in this repo. You may see the former commits contains keras  code. But I have changed the code into tf already in the last commit.
 
-This repo is not support for gpu yet, but I'm working on it, since I don't have a gpu yet...
+This repo is not support for gpu yet, ~~but I'm working on it, since I don't have a gpu yet...~~
 
 I am a newbie and still learning, so feel free to raise some issues and make pull requests.
 
